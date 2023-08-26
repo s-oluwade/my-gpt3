@@ -1,0 +1,182 @@
+[
+    {
+        "id": "australian-financial-review",
+        "name": "Australian Financial Review",
+        "description": "The Australian Financial Review reports the latest news from business, finance, investment and politics, updated in real time. It has a reputation for independent, award-winning journalism and is essential reading for the business and investor community.",
+        "url": "http://www.afr.com",
+        "category": "business",
+        "language": "en",
+        "country": "au"
+    },
+    {
+        "id": "bbc-sport",
+        "name": "BBC Sport",
+        "description": "The home of BBC Sport online. Includes live sports coverage, breaking news, results, video, audio and analysis on Football, F1, Cricket, Rugby Union, Rugby League, Golf, Tennis and all the main world sports, plus major events such as the Olympic Games.",
+        "url": "http://www.bbc.co.uk/sport",
+        "category": "sports",
+        "language": "en",
+        "country": "gb"
+    },
+    {
+        "id": "bleacher-report",
+        "name": "Bleacher Report",
+        "description": "Sports journalists and bloggers covering NFL, MLB, NBA, NHL, MMA, college football and basketball, NASCAR, fantasy sports and more. News, photos, mock drafts, game scores, player profiles and more!",
+        "url": "http://www.bleacherreport.com",
+        "category": "sports",
+        "language": "en",
+        "country": "us"
+    },
+    {
+        "id": "bloomberg",
+        "name": "Bloomberg",
+        "description": "Bloomberg delivers business and markets news, data, analysis, and video to the world, featuring stories from Businessweek and Bloomberg News.",
+        "url": "http://www.bloomberg.com",
+        "category": "business",
+        "language": "en",
+        "country": "us"
+    },
+    {
+        "id": "business-insider-uk",
+        "name": "Business Insider (UK)",
+        "description": "Business Insider is a fast-growing business site with deep financial, media, tech, and other industry verticals. Launched in 2007, the site is now the largest business news site on the web.",
+        "url": "http://uk.businessinsider.com",
+        "category": "business",
+        "language": "en",
+        "country": "gb"
+    },
+    {
+        "id": "cbc-news",
+        "name": "CBC News",
+        "description": "CBC News is the division of the Canadian Broadcasting Corporation responsible for the news gathering and production of news programs on the corporation's English-language operations, namely CBC Television, CBC Radio, CBC News Network, and CBC.ca.",
+        "url": "http://www.cbc.ca/news",
+        "category": "general",
+        "language": "en",
+        "country": "ca"
+    },
+    {
+        "id": "football-italia",
+        "name": "Football Italia",
+        "description": "Italian football news, analysis, fixtures and results for the latest from Serie A, Serie B and the Azzurri.",
+        "url": "http://www.football-italia.net",
+        "category": "sports",
+        "language": "en",
+        "country": "it"
+    },
+    {
+        "id": "google-news-in",
+        "name": "Google News (India)",
+        "description": "Comprehensive, up-to-date India news coverage, aggregated from sources all over the world by Google News.",
+        "url": "https://news.google.com",
+        "category": "general",
+        "language": "en",
+        "country": "in"
+    },
+    {
+        "id": "independent",
+        "name": "Independent",
+        "description": "National morning quality (tabloid) includes free online access to news and supplements. Insight by Robert Fisk and various other columnists.",
+        "url": "http://www.independent.co.uk",
+        "category": "general",
+        "language": "en",
+        "country": "gb"
+    },
+    {
+        "id": "medical-news-today",
+        "name": "Medical News Today",
+        "description": "Medical news and health news headlines posted throughout the day, every day.",
+        "url": "http://www.medicalnewstoday.com",
+        "category": "health",
+        "language": "en",
+        "country": "us"
+    },
+    {
+        "id": "mtv-news-uk",
+        "name": "MTV News (UK)",
+        "description": "All the latest celebrity news, gossip, exclusive interviews and pictures from the world of music and entertainment.",
+        "url": "http://www.mtv.co.uk/news",
+        "category": "entertainment",
+        "language": "en",
+        "country": "gb"
+    },
+    {
+        "id": "news24",
+        "name": "News24",
+        "description": "South Africa's premier news source, provides breaking news on national, world, Africa, sport, entertainment, technology and more.",
+        "url": "http://www.news24.com",
+        "category": "general",
+        "language": "en",
+        "country": "za"
+    },
+    {
+        "id": "new-scientist",
+        "name": "New Scientist",
+        "description": "Breaking science and technology news from around the world. Exclusive stories and expert analysis on space, technology, health, physics, life and Earth.",
+        "url": "https://www.newscientist.com/section/news",
+        "category": "science",
+        "language": "en",
+        "country": "us"
+    },
+    {
+        "id": "news-com-au",
+        "name": "News.com.au",
+        "description": "We say what people are thinking and cover the issues that get people talking balancing Australian and global moments — from politics to pop culture.",
+        "url": "http://www.news.com.au",
+        "category": "general",
+        "language": "en",
+        "country": "au"
+    },
+    {
+        "id": "polygon",
+        "name": "Polygon",
+        "description": "Polygon is a gaming website in partnership with Vox Media. Our culture focused site covers games, their creators, the fans, trending stories and entertainment news.",
+        "url": "http://www.polygon.com",
+        "category": "entertainment",
+        "language": "en",
+        "country": "us"
+    },
+    {
+        "id": "techradar",
+        "name": "TechRadar",
+        "description": "The latest technology news and reviews, covering computing, home entertainment systems, gadgets and more.",
+        "url": "http://www.techradar.com",
+        "category": "technology",
+        "language": "en",
+        "country": "us"
+    },
+    {
+        "id": "the-irish-times",
+        "name": "The Irish Times",
+        "description": "The Irish Times online. Latest news including sport, analysis, business, weather and more from the definitive brand of quality news in Ireland.",
+        "url": "https://www.irishtimes.com",
+        "category": "general",
+        "language": "en",
+        "country": "ie"
+    },
+    {
+        "id": "the-jerusalem-post",
+        "name": "The Jerusalem Post",
+        "description": "The Jerusalem Post is the leading online newspaper for English speaking Jewry since 1932, bringing news and updates from the Middle East and all over the Jewish world.",
+        "url": "https://www.jpost.com/",
+        "category": "general",
+        "language": "en",
+        "country": "is"
+    },
+    {
+        "id": "the-times-of-india",
+        "name": "The Times of India",
+        "description": "Times of India brings the Latest News and Top Breaking headlines on Politics and Current Affairs in India and around the World, Sports, Business, Bollywood News and Entertainment, Science, Technology, Health and Fitness news, Cricket and opinions from leading columnists.",
+        "url": "http://timesofindia.indiatimes.com",
+        "category": "general",
+        "language": "en",
+        "country": "in"
+    },
+    {
+        "id": "the-washington-times",
+        "name": "The Washington Times",
+        "description": "The Washington Times delivers breaking news and commentary on the issues that affect the future of our nation.",
+        "url": "https://www.washingtontimes.com/",
+        "category": "general",
+        "language": "en",
+        "country": "us"
+    }
+]
