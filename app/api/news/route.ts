@@ -1,22 +1,5 @@
 import { NextResponse } from 'next/server';
 
-interface EverythingNewsProps {
-    articles: any[];
-}
-
-interface ArticleProps {
-    [key: string]: {
-        source: { id: string; name: string };
-        author: string;
-        description: string;
-        url: string;
-        urlToImage: string;
-        publishedAt: string;
-        content: string;
-        category: string;
-    }[];
-}
-
 const countryIdentifier = {
     us: 'United States',
     au: 'Australia',
@@ -72,7 +55,7 @@ const sources = {
         'the-washington-times',
     ],
     au: ['news-com-au', 'australian-financial-review'],
-    gb: ['mtv-news-uk', 'independent', 'business-insider-uk', 'bbc-sport'],
+    gb: ['mtv-news-uk', 'independent', 'business-insider-uk', 'talksport'],
     ca: ['cbc-news'],
     it: ['football-italia'],
     in: ['the-times-of-india'],
@@ -80,6 +63,29 @@ const sources = {
     ie: ['the-irish-times'],
     is: ['the-jerusalem-post'],
 };
+
+interface EverythingNewsProps {
+    articles: any[];
+}
+
+export interface Article {
+    source: { id: string; name: string };
+    author: string;
+    description: string;
+    url: string;
+    urlToImage: string;
+    publishedAt: string;
+    content: string;
+    category: string;
+}
+
+export interface FilteredArticles {
+    [filterKey: string]: Article[];
+}
+
+export interface NewsResponse {
+    [date: string]: FilteredArticles;
+}
 
 export async function GET(request: Request) {
     // queries: country, source, category
@@ -90,121 +96,131 @@ export async function GET(request: Request) {
     const country = searchParams.get('country');
     const source = searchParams.get('source');
 
-    console.log('printing params: ');
-    console.log(country);
-
     const NewsAPI = require('newsapi');
     const newsapi = new NewsAPI('02d21b3fddea4e8f9abb3b09f67f60f3');
 
-    if (requestType === 'load' && weekend) {
-        const weekendTokens = weekend.split('-');
-        const year = parseInt(weekendTokens[0]);
-        const month = parseInt(weekendTokens[1]);
-        const day = parseInt(weekendTokens[2]);
-        const date = new Date(year, month - 1, day);
-        if (date.toString() === 'Invalid Date') {
-            console.log('Invalid Date');
-            return null;
-        }
-
-        const endDate = date.toISOString().substring(0, 10);
-        date.setDate(date.getDate() - 6);
-        const startDate = date.toISOString().substring(0, 10);
-
-        try {
-            require('./newsarticles/' + endDate + '.json');
-            console.log('file already exists');
-        } catch (error) {
-            // file does not exist, proceed with creation
-            const result: { [x: string]: any } = {};
-
-            for (const [key, value] of Object.entries(sources)) {
-                const articles: any[] = await Promise.all(
-                    value.map(async (source) => {
-                        const res: EverythingNewsProps = await newsapi.v2.everything({
-                            sources: source,
-                            from: startDate,
-                            to: endDate,
-                            language: 'en',
-                            sortBy: 'relevancy',
-                            pageSize: 1,
-                        });
-
-                        if (res.articles.length > 0) {
-                            res.articles[0]['category'] = sourcesCategories[source];
-                        }
-
-                        return res.articles[0];
-                    })
-                );
-
-                result[key] = articles;
+    if (requestType === 'load') {
+        if (weekend) {
+            const weekendTokens = weekend.split('-');
+            const year = parseInt(weekendTokens[0]);
+            const month = parseInt(weekendTokens[1]);
+            const day = parseInt(weekendTokens[2]);
+            const date = new Date(year, month - 1, day);
+            if (date.toString() === 'Invalid Date') {
+                console.log('Invalid Date');
+                return null;
             }
-            // console.log(result);
-            if (Object.keys(result).length > 0) {
-                var fs = require('fs');
-                fs.writeFile(
-                    `${endDate}.json`,
-                    JSON.stringify(result),
-                    function (err: any) {
+
+            const endDate = date.toISOString().substring(0, 10);
+            date.setDate(date.getDate() - 6);
+            const startDate = date.toISOString().substring(0, 10);
+
+            try {
+                require('./newsarticles/' + endDate + '.json');
+                console.log('file already exists');
+            } catch (error) {
+                // file does not exist, proceed with creation
+                const result: { [x: string]: any } = {};
+                const size = 1;
+
+                for (const [key, value] of Object.entries(sources)) {
+                    const articles: any[] = await Promise.all(
+                        value.map(async (source) => {
+                            const res: EverythingNewsProps = await newsapi.v2.everything({
+                                sources: source,
+                                from: startDate,
+                                to: endDate,
+                                language: 'en',
+                                sortBy: 'relevancy',
+                                pageSize: size,
+                            });
+
+                            if (res.articles.length > 0) {
+                                for (let i = 0; i < res.articles.length; i++) {
+                                    res.articles[i]['category'] = sourcesCategories[source];
+                                    return res.articles[i];
+                                }
+                            }
+                        })
+                    );
+
+                    result[key] = articles;
+                }
+                // console.log(result);
+                if (Object.keys(result).length > 0) {
+                    var fs = require('fs');
+                    fs.writeFile(`${endDate}.json`, JSON.stringify(result), function (err: any) {
                         if (err) {
                             console.error(err);
                         }
-                    }
-                );
+                    });
+                }
             }
         }
-    } else if (requestType === 'fetch') {
-        const news: ArticleProps[] = [];
+        else {
+            // Use this endpoint for single loading
+            const startDate = '2023-08-12'
+            const endDate = '2023-08-19'
+            const res: EverythingNewsProps = await newsapi.v2.everything({
+                sources: 'talksport',
+                from: startDate,
+                to: endDate,
+                language: 'en',
+                sortBy: 'relevancy',
+                pageSize: 1,
+            });
 
+            var fs = require('fs');
+            fs.writeFile(`gb_talksport.json`, JSON.stringify(res.articles[0]), function (err: any) {
+                if (err) {
+                    console.error(err);
+                }
+            });
+        }
+        
+    } else if (requestType === 'fetch') {
         const fs = require('fs');
         const availableFiles: string[] = fs.readdirSync('./app/api/news/newsarticles');
+        const groupedFilteredArticles: NewsResponse = {};
 
         if (weekend) {
-            news.push(require('./newsarticles/' + weekend + '.json'));
+            groupedFilteredArticles[weekend] = require('./newsarticles/' + weekend + '.json');
         } else {
             availableFiles.forEach((each) => {
-                news.push(require('./newsarticles/' + each));
+                groupedFilteredArticles[each] = require('./newsarticles/' + each);
             });
         }
 
+        let response: NewsResponse = groupedFilteredArticles;
         if (category) {
-            const response = [];
-            for (const resource of news) {
-                for (const [key, articles] of Object.entries(resource)) {
-                    response.push({
-                        [key]: articles.filter((item: any) => item && item.category === category),
-                    });
+            for (const [dateKey, filteredArticles] of Object.entries(response)) {
+                let updatedFilteredArticles: FilteredArticles = {};
+                for (const [countryKey, articleList] of Object.entries(filteredArticles)) {
+                    updatedFilteredArticles[countryKey] = articleList.filter(
+                        (item: Article) => item && item.category === category
+                    );
                 }
+                response[dateKey] = updatedFilteredArticles;
             }
-            return NextResponse.json(response);
-        } else if (country) {
-            print('hit');
-            print(news);
-            const response = [];
-            for (const r of news) {
-                response.push(r[country]);
-            }
-            print('response:');
-            print(response);
-            return NextResponse.json(response);
-        } else if (source) {
-            const response = [];
-            for (const resource of news) {
-                for (const [key, value] of Object.entries(resource)) {
-                    response.push({
-                        [key]: value.filter((item: any) => item.source.id === source),
-                    });
-                }
-            }
-            return NextResponse.json(response);
         }
-        return NextResponse.json(news);
+        if (source) {
+            for (const [dateKey, filteredArticles] of Object.entries(response)) {
+                let updatedFilteredArticles: FilteredArticles = {};
+                for (const [countryKey, articleList] of Object.entries(filteredArticles)) {
+                    updatedFilteredArticles[countryKey] = articleList.filter(
+                        (item: Article) => item && item.source.id === source
+                    );
+                }
+                response[dateKey] = updatedFilteredArticles;
+            }
+        }
+        if (country) {
+            for (const [dateKey, filteredArticles] of Object.entries(response)) {
+                response[dateKey] = { [country]: filteredArticles[country] };
+            }
+        }
+        return NextResponse.json(response);
     }
 
     return NextResponse.json(null);
-}
-
-function print(str: any) {
-    return console.log(str);
 }

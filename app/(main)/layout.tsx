@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 // Layout for all pages that use the navbar and sidebar (they go together).
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className='h-full dark:bg-muted dark:text-muted-foreground'>
+        <div className='h-full dark:bg-muted dark:text-muted-foreground main-page'>
             <Navbar />
             <div className='fixed inset-y-0 mt-16 hidden flex-col md:flex'>
                 <Sidebar />

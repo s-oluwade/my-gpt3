@@ -1,9 +1,8 @@
 'use server';
 
 export async function getNews(url: string) {
-    console.log(url);
     
-    const res = await fetch(url);
+    const res = await fetch(url, {cache: 'no-store'});
     const news = await res.json();
 
     return news;
