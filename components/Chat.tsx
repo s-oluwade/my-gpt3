@@ -1,67 +1,93 @@
 // components/Chat.js
 'use client';
 
+import { getOneNews } from '@/app/(main)/(routes)/(root)/actions';
+import { getGPTResponse } from '@/app/(main)/(routes)/gpt/actions';
+import { Article } from '@/app/api/news/route';
 import OpenAI from 'openai';
-import {useState} from 'react';
-import {Input} from './ui/input';
-import {Button} from './ui/button';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
 
 interface ChatProps {
-  getGPTResponse: (text: string) => Promise<OpenAI.Chat.Completions.ChatCompletionMessage>;
+    articleId: string | null;
 }
 
-function Chat({getGPTResponse}: ChatProps) {
-  const [messages, setMessages] = useState<{text: string; type: string}[]>([]);
-  const [input, setInput] = useState('');
+function Chat({ articleId = null }: ChatProps) {
+    const [messages, setMessages] = useState<OpenAI.Chat.Completions.ChatCompletionMessage[]>([]);
+    const [input, setInput] = useState('');
+    const [article, setArticle] = useState<Article | null>(null);
+    const initialRender = useRef(true);
 
-  const handleSendMessage = async () => {
-    if (input.trim() === '') return;
+    useEffect(() => {
+        if (articleId) {
+            (async () => {
+                setArticle(await getOneNews(articleId));
+            })();
+        }
+    }, [articleId]);
 
-    const response = await getGPTResponse(input);
+    const handleGPTRequest = useCallback(async () => {
+        const response = await getGPTResponse(messages, input, article);
 
-    setMessages([...messages, {text: input, type: 'user'}]);
-    setInput('');
+        if (!response) {
+            return;
+        }
 
-    if (response.content) {
-      setMessages((old) => [...old, {text: response.content!, type: 'ai'}]);
-    } else {
-      setMessages([...messages, {text: '[no response from GPT]', type: 'ai'}]);
-    }
-  };
+        setMessages([...messages, { content: input, role: 'user' }]);
+        setInput('');
 
-  return (
-    <div className='flex flex-col gap-4 w-full md:w-[80%] px-6'>
-      <div className='bg-neutral-900 text-secondary-foreground p-4 rounded-md h-96 w-full overflow-auto text-sm'>
-        {messages.map((message, index) => (
-          <>
-            <div key={index} className={message.type}>
-              <span className='uppercase'>{message.type}</span>
-              :&nbsp;{message.text}
+        if (response.content) {
+            setMessages((old) => [...old, { content: response.content!, role: 'assistant' }]);
+        } else {
+            console.log('no response from GPT');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [article]);
+
+    useEffect(() => {
+        if (!initialRender.current) {
+            if (article) {
+                handleGPTRequest();
+            }
+        }
+        initialRender.current = false;
+    }, [article, handleGPTRequest]);
+
+    return (
+        <div className='flex w-full flex-col gap-4 px-6 md:w-[80%]'>
+            <div className='h-96 w-full overflow-auto rounded-md bg-neutral-900 p-4 text-sm text-secondary-foreground'>
+                {messages.map((message, index) => (
+                    <>
+                        <div key={index}>
+                            <span className='uppercase'>{message.role}</span>
+                            :&nbsp;{message.content}
+                        </div>
+                        <br />
+                    </>
+                ))}
             </div>
-            <br />
-          </>
-        ))}
-      </div>
-      <div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSendMessage();
-          }}>
-          <fieldset className='flex gap-2'>
-            <Input
-              title='Talk to Chat GPT'
-              placeholder='Say something...'
-              type='text'
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-            <Button type='submit'>Send</Button>
-          </fieldset>
-        </form>
-      </div>
-    </div>
-  );
+            <div>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleGPTRequest();
+                    }}
+                >
+                    <fieldset className='flex gap-2'>
+                        <Input
+                            title='Talk to Chat GPT'
+                            placeholder='Say something...'
+                            type='text'
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                        />
+                        <Button type='submit'>Send</Button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    );
 }
 
 export default Chat;

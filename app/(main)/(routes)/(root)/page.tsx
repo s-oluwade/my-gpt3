@@ -1,37 +1,42 @@
 'use client';
-import { NewsResponse } from '@/app/api/news/route';
-import SearchInput from '@/components/SearchInput';
+import BlogSection from '@/app/(main)/(routes)/(root)/BlogSection';
+import SearchInput from '@/app/(main)/(routes)/(root)/SearchInput';
+import { Article } from '@/app/api/news/route';
+import { Selector } from '@/components/Selector';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import qs from 'query-string';
-import { useState } from 'react';
-import { getNews } from './actions';
-import BlogCard1 from '@/components/BlogCard1';
-import BlogCard2 from '@/components/BlogCard2';
-import BlogCard3 from '@/components/BlogCard3';
-import BlogCard4 from '@/components/BlogCard4';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { getAllNews } from './actions';
 
 const categories = [
     {
-        name: 'business',
+        id: 'business',
+        name: 'Business',
     },
     {
-        name: 'entertainment',
+        id: 'entertainment',
+        name: 'Entertainment',
     },
     {
-        name: 'general',
+        id: 'general',
+        name: 'General',
     },
     {
-        name: 'health',
+        id: 'health',
+        name: 'Health',
     },
     {
-        name: 'science',
+        id: 'science',
+        name: 'Science',
     },
     {
-        name: 'sports',
+        id: 'sports',
+        name: 'Sports',
     },
     {
-        name: 'technology',
+        id: 'technology',
+        name: 'Technology',
     },
 ];
 
@@ -75,142 +80,151 @@ const countries = [
 ];
 
 export default function Home() {
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-    const [news, setNews] = useState<NewsResponse | null>(null);
-
     const router = useRouter();
+    const params = useSearchParams();
+    const [selectedCategory, setSelectedCategory] = useState<string>(params.get('category') ?? '');
+    const [selectedCountry, setSelectedCountry] = useState<string>(params.get('country') ?? '');
+    const [news, setNews] = useState<Article[]>([]);
+    const [newsIsLoading, setNewsIsLoading] = useState<boolean>(true);
+    const initialRender = useRef(true);
 
-    function handleCategories(category: string | undefined = undefined) {
-        const query = { category };
-
-        const url = qs.stringifyUrl(
-            {
-                url: window.location.href,
-                query,
-            },
-            {
-                skipNull: true,
-            }
-        );
-
-        let parsedQuery = qs.parseUrl(url);
-
-        const apiUrl = qs.stringifyUrl({
-            url: parsedQuery.url + 'api/news',
-            query: { ...parsedQuery.query, requestType: 'fetch' },
-        });
-
+    useEffect(() => {
         (async () => {
-            const news = await getNews(apiUrl);
-            setNews(news);
+            setNews(await getAllNews(window.location.href));
+            setNewsIsLoading(false);
         })();
+    }, []);
 
-        router.push(url);
+    const handleChoice = useCallback(
+        (type: 'category' | 'country', choice: string = '') => {
+            const nullifyEmptyStringChoice = choice === '' ? null : choice;
+            let query: {
+                [x: string]: string | null;
+            } =
+                type === 'category'
+                    ? { category: nullifyEmptyStringChoice }
+                    : { country: nullifyEmptyStringChoice };
 
-        const mySearch = new URLSearchParams(qs.extract(url));
-        setSelectedCategory(mySearch.get('category'));
-    }
+            const url = qs.stringifyUrl(
+                {
+                    url: window.location.href,
+                    query,
+                },
+                {
+                    skipNull: true,
+                }
+            );
 
-    function handleCountries(country: string | undefined = undefined) {
-        const query = { country };
+            router.push(url);
 
-        const url = qs.stringifyUrl(
-            {
-                url: window.location.href,
-                query,
-            },
-            {
-                skipNull: true,
-            }
-        );
+            (async () => {
+                setNews(await getAllNews(url));
+            })();
+        },
+        [router]
+    );
 
-        let parsedQuery = qs.parseUrl(url);
+    useEffect(() => {
+        if (!initialRender.current) {
+            handleChoice('category', selectedCategory);
+        }
 
-        const apiUrl = qs.stringifyUrl({
-            url: parsedQuery.url + 'api/news',
-            query: { ...parsedQuery.query, requestType: 'fetch' },
-        });
+        initialRender.current = false;
+    }, [handleChoice, selectedCategory]);
 
-        (async () => {
-            const news = await getNews(apiUrl);
-            setNews(news);
-        })();
+    useEffect(() => {
+        if (!initialRender.current) {
+            handleChoice('country', selectedCountry);
+        }
 
-        router.push(url);
-        const mySearch = new URLSearchParams(qs.extract(url));
-        setSelectedCountry(mySearch.get('country'));
-    }
+        initialRender.current = false;
+    }, [handleChoice, selectedCountry]);
 
     return (
         <main>
-            <div id='filter' className='mx-16'>
+            <div id='filter' className='mx-auto space-y-2 md:w-4/5'>
                 <SearchInput />
-                <div
-                    id='categories'
-                    className='flex w-full items-center space-x-2 overflow-x-auto p-1'
-                >
-                    <div className='text-xs text-secondary-foreground'>Category: </div>
-                    <Button
-                        className='text-xs'
-                        onClick={() => handleCategories()}
-                        {...(selectedCategory ? { variant: 'ghost' } : { variant: 'outline' })}
-                        size={'sm'}
-                        key={'_'}
-                    >
-                        None
-                    </Button>
-                    {categories.map((category) => (
-                        <Button
-                            className='whitespace-pre text-xs'
-                            onClick={() => handleCategories(category.name)}
-                            {...(selectedCategory === category.name
-                                ? { variant: 'outline' }
-                                : { variant: 'ghost' })}
-                            size={'sm'}
-                            key={category.name}
-                        >
-                            {category.name}
-                        </Button>
-                    ))}
+                <div className='flex w-full justify-center md:hidden'>
+                    <Selector
+                        onChange={setSelectedCategory}
+                        options={categories}
+                        label='Category'
+                        value={selectedCategory}
+                    />
+                    <Selector
+                        onChange={setSelectedCountry}
+                        options={countries}
+                        label='Country'
+                        value={selectedCountry}
+                    />
                 </div>
-                <div
-                    id='countries'
-                    className='flex w-full items-center space-x-2 overflow-x-auto p-1'
-                >
-                    <div className='text-xs text-secondary-foreground'>Country: </div>
-                    <Button
-                        className='text-xs'
-                        onClick={() => handleCountries()}
-                        {...(selectedCountry ? { variant: 'ghost' } : { variant: 'outline' })}
-                        size={'sm'}
-                        key={'_'}
-                    >
-                        None
-                    </Button>
-                    {countries.map((country) => (
+                <div className=''>
+                    <div id='country' className='hidden flex-wrap items-center p-1 md:flex'>
+                        <span className='text-xs text-secondary-foreground'>COUNTRY: &nbsp;</span>
+                        <div id='country-options'>
                         <Button
-                            className='whitespace-pre text-xs'
-                            onClick={() => handleCountries(country.id)}
-                            {...(selectedCountry === country.id
-                                ? { variant: 'outline' }
-                                : { variant: 'ghost' })}
+                            className='h-6 text-xs'
+                            onClick={() => setSelectedCountry('')}
+                            {...(selectedCountry ? { variant: 'link_off' } : { variant: 'link' })}
                             size={'sm'}
-                            key={country.id}
+                            key={'_'}
                         >
-                            {country.name}
+                            All
                         </Button>
-                    ))}
+                        {countries.map((country) => (
+                            <Button
+                                className='h-6 whitespace-pre text-xs'
+                                onClick={() => setSelectedCountry(country.id)}
+                                {...(selectedCountry === country.id
+                                    ? { variant: 'link' }
+                                    : { variant: 'link_off' })}
+                                size={'sm'}
+                                key={country.id}
+                            >
+                                {country.name}
+                            </Button>
+                        ))}
+                        </div>
+                    </div>
+                    <div id='category' className='hidden flex-wrap items-center p-1 md:flex'>
+                        <div className='text-xs text-secondary-foreground'>CATEGORY: </div>
+                        <div id='category-options'>
+                            <Button
+                                className='h-6 text-xs'
+                                onClick={() => setSelectedCategory('')}
+                                {...(selectedCategory
+                                    ? { variant: 'link_off' }
+                                    : { variant: 'link' })}
+                                size={'sm'}
+                                key={'_'}
+                            >
+                                All
+                            </Button>
+                            {categories.map((category) => (
+                                <Button
+                                    className='h-6 whitespace-pre text-xs'
+                                    onClick={() => setSelectedCategory(category.id)}
+                                    {...(selectedCategory === category.id
+                                        ? { variant: 'link' }
+                                        : { variant: 'link_off' })}
+                                    size={'sm'}
+                                    key={category.id}
+                                >
+                                    {category.name}
+                                </Button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div>
-                {news && (
-                    <>
-                    <BlogCard1/>
-                    <BlogCard4/>
-                    </>
-                )}
-            </div>
+            {newsIsLoading && (
+                <div className='w-full p-20 text-center text-xl uppercase'>News Is Loading...</div>
+            )}
+            {news && !newsIsLoading && (
+                <div className='px-6'>
+                    <BlogSection news={news} />
+                </div>
+            )}
         </main>
     );
 }

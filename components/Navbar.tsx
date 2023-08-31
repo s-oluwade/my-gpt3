@@ -1,22 +1,6 @@
-'use client';
-
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuIndicator,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    NavigationMenuViewport,
-} from '@/components/ui/navigation-menu';
-import Link from 'next/link';
-import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
-import { Menu } from 'lucide-react';
-import { Poppins } from 'next/font/google';
 import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
-import { ModeToggle } from './ModeToggle';
+import { Poppins } from 'next/font/google';
+import Link from 'next/link';
 import MobileSidebar from './MobileSidebar';
 
 const font = Poppins({
