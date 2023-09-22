@@ -23,12 +23,12 @@ export async function getGPTResponse(
             {
                 role: 'user',
                 content:
-                    'GPT can you please summarize the following news article in at most 3 sentences?\n\n',
+                    'GPT summarize the following news article in 3 lines.\n',
             },
             {
                 role: 'user',
                 content: `Article title: ${article?.title}\n
-          Article description: \n
+          Article description: ${article?.description}\n
           Article body: \n
           `,
             },

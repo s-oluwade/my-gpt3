@@ -56,18 +56,23 @@ function Chat({ articleId = null }: ChatProps) {
 
     return (
         <div className='flex w-full flex-col gap-4 px-6 md:w-[80%]'>
-            <div className='h-96 w-full overflow-auto rounded-md bg-neutral-900 p-4 text-sm text-secondary-foreground'>
-                {messages.map((message, index) => (
-                    <>
-                        <div key={index}>
-                            <span className='uppercase'>{message.role}</span>
-                            :&nbsp;{message.content}
-                        </div>
-                        <br />
-                    </>
-                ))}
+            <div className='h-96 w-full overflow-auto rounded-md p-4 text-sm text-secondary-foreground'>
+                {messages.map((message, index) => {
+                    if (!message.content) {
+                        return
+                    }
+                    else {
+                        return (<>
+                            <div key={index}>
+                                {/* <span className='uppercase'>{message.role}</span> */}
+                                {message.content}
+                            </div>
+                            <br />
+                        </>)
+                    }
+                })}
             </div>
-            <div>
+            {/* <div>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -85,7 +90,7 @@ function Chat({ articleId = null }: ChatProps) {
                         <Button type='submit'>Send</Button>
                     </fieldset>
                 </form>
-            </div>
+            </div> */}
         </div>
     );
 }

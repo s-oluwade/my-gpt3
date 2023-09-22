@@ -2,15 +2,15 @@ import { Article } from '@/app/api/news/route';
 import Image from 'next/image';
 import Link from 'next/link';
 
-interface ArticleProps {
+interface Props {
     article: Article;
 }
 
-const Article = ({ article }: ArticleProps) => {
+const ArticleCard = ({ article }: Props) => {
     return (
-        <div key={article.url} className='flex flex-wrap p-8 md:flex-nowrap bg-black'>
+        <div key={article.url} className='flex flex-wrap p-8 md:flex-nowrap bg-slate-900'>
             <div className='mb-6 flex flex-shrink-0 flex-col md:mb-0 md:w-64'>
-                <span className='font-semibold uppercase text-gray-700 dark:text-gray-500'>
+                <span className='font-semibold uppercase text-gray-700 dark:text-gray-500 whitespace-pre'>
                     {article.source.name}
                 </span>
                 <span className='mt-1 text-sm text-gray-500'>
@@ -39,10 +39,10 @@ const Article = ({ article }: ArticleProps) => {
                         className='ml-2 h-4 w-4'
                         viewBox='0 0 24 24'
                         stroke='currentColor'
-                        stroke-width='2'
+                        strokeWidth='2'
                         fill='none'
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
                     >
                         <path d='M5 12h14'></path>
                         <path d='M12 5l7 7-7 7'></path>
@@ -53,4 +53,4 @@ const Article = ({ article }: ArticleProps) => {
     );
 };
 
-export default Article;
+export default ArticleCard;

@@ -34,9 +34,9 @@ const ArticlePage = ({ params: { id = '0' } }: ArticlePageProps) => {
 
             {!isLoading && !article && <div>No article found</div>}
             {!isLoading && article && (
-                <div id='article' className='mt-4 flex flex-col gap-6'>
+                <div id='article' className='md:mt-4 flex flex-col gap-6 p-4'>
                     <div id='gpt-requestor'>
-                        <Link target='_blank' href={`/gpt/?articleId=${article.id}`}>
+                        <Link href={`/gpt/?articleId=${article.id}`}>
                         <Button variant={'outline'}>
                             GPT Summarize this News Article
                         </Button>
