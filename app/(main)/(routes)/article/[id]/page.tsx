@@ -18,12 +18,11 @@ const ArticlePage = ({ params: { id = '0' } }: ArticlePageProps) => {
 
     useEffect(() => {
         (async () => {
-            setArticle(await getOneNews(id));
+            setArticle(await getOneNews(window.location.protocol+'//'+window.location.host, id));
             console.log('loading should now be false')
             setIsLoading(false);
         })();
     }, [id]);
-    console.log(isLoading);
 
     return (
         <div id='article-container' className='mx-auto max-w-4xl'>
