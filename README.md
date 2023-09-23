@@ -2,5 +2,6 @@
 
 [NewsAI](https://mynewsai.vercel.app/)
 
+- It is currently hosted on vercel (link above).
 - It was developed using Nextjs, Shadcn UI, and TypeScript.
 
