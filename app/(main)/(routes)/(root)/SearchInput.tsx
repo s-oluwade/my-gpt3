@@ -39,7 +39,7 @@ const SearchInput = () => {
     }
 
     return (
-        <div className='relative mx-4'>
+        <div className='relative'>
             <Search className='absolute left-4 top-3 h-4 w-4 text-muted-foreground' />
             <Input
                 placeholder='Search...'

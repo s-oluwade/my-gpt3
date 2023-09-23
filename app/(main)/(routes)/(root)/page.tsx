@@ -157,7 +157,7 @@ export default function Home() {
 
     return (
         <main>
-            <div id='filter' className='mx-auto space-y-2 md:w-4/5'>
+            <div id='filter' className='mx-4 md:mx-auto space-y-2 md:w-4/5'>
                 <SearchInput />
                 <div className='flex w-full justify-center md:hidden'>
                     <Selector
