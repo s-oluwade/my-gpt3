@@ -2,8 +2,6 @@
 
 import { Article } from '@/app/api/news/route';
 import qs from 'query-string';
-import axios from 'axios';
-import * as cheerio from 'cheerio';
 
 export async function getAllNews(url: string): Promise<Article[]> {
     let parsedQuery = qs.parseUrl(url);

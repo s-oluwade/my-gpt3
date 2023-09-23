@@ -22,7 +22,7 @@ function Chat({ articleId = null }: ChatProps) {
     useEffect(() => {
         if (articleId) {
             (async () => {
-                setArticle(await getOneNews(articleId));
+                setArticle(await getOneNews(window.location.protocol+'//'+window.location.host, articleId));
             })();
         }
     }, [articleId]);
