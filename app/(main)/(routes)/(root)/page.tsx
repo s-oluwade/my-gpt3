@@ -1,4 +1,5 @@
 'use client';
+
 import BlogSection from '@/app/(main)/(routes)/(root)/BlogSection';
 import SearchInput from '@/app/(main)/(routes)/(root)/SearchInput';
 import { Article } from '@/app/api/news/route';
@@ -109,7 +110,7 @@ export default function Home() {
                 skipNull: true,
             }
         );
-        
+
         router.push(url);
         (async () => {
             setNews(await getAllNews(url));
@@ -205,8 +206,8 @@ export default function Home() {
                 </div>
             </div>
             {newsIsLoading ? (
-                <div className='hidden md:flex mt-8 flex-col items-center justify-center space-y-4'>
-                    <Skeleton className='h-8 w-[600px]' />
+                <div className='mt-12 md:ml-20 lg:ml-32 xl:ml-48 flex-col items-center justify-center space-y-4 flex md:w-[600px] lg:w-[700px]'>
+                    <Skeleton className='hidden md:flex h-4 w-4/5' />
                     <ArticleCardSkeleton />
                     <ArticleCardSkeleton />
                     <ArticleCardSkeleton />

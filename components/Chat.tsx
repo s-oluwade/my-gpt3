@@ -1,4 +1,3 @@
-// components/Chat.js
 'use client';
 
 import { getOneNews } from '@/app/(main)/(routes)/(root)/actions';
@@ -6,8 +5,6 @@ import { getGPTResponse } from '@/app/(main)/(routes)/gpt/actions';
 import { Article } from '@/app/api/news/route';
 import OpenAI from 'openai';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
 
 interface ChatProps {
     articleId: string | null;

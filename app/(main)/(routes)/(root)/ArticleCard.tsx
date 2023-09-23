@@ -10,7 +10,7 @@ const ArticleCard = ({ article }: Props) => {
     return (
         <div key={article.url} className='flex flex-wrap p-8 md:flex-nowrap bg-slate-900'>
             <div className='mb-6 flex flex-shrink-0 flex-col md:mb-0 md:w-64'>
-                <span className='font-semibold uppercase text-gray-700 dark:text-gray-500 whitespace-pre'>
+                <span className='font-semibold uppercase text-gray-700 dark:text-gray-500 whitespace-pre md:whitespace-normal'>
                     {article.source.name}
                 </span>
                 <span className='mt-1 text-sm text-gray-500'>

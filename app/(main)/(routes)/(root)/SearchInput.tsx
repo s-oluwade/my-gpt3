@@ -11,7 +11,7 @@ const SearchInput = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const categoryId = searchParams.get('categoryId');
+    const category = searchParams.get('category');
     const searchString = searchParams.get('searchString');
 
     const [value, setValue] = useState(searchString || '');
@@ -20,7 +20,7 @@ const SearchInput = () => {
     useEffect(() => {
         const query = {
             searchString: debouncedValue,
-            categoryId,
+            category,
         };
 
         const url = qs.stringifyUrl(
@@ -32,14 +32,14 @@ const SearchInput = () => {
         );
 
         router.push(url);
-    }, [categoryId, debouncedValue, router]);
+    }, [category, debouncedValue, router]);
 
     function handleChange(event: ChangeEvent<HTMLInputElement>) {
         setValue(event.target.value);
     }
 
     return (
-        <div className='relative'>
+        <div className='relative mx-4'>
             <Search className='absolute left-4 top-3 h-4 w-4 text-muted-foreground' />
             <Input
                 placeholder='Search...'

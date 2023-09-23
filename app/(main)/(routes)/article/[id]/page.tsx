@@ -27,7 +27,17 @@ const ArticlePage = ({ params: { id = '0' } }: ArticlePageProps) => {
     return (
         <div id='article-container' className='mx-auto max-w-4xl'>
             {isLoading && (
-                <div className='space-y-2'>
+                <div className='space-y-8 my-8'>
+                    <Skeleton className='h-4 w-48' />
+                    <Skeleton className='h-4 w-24' />
+                    <Skeleton className='h-4' />
+                    <Skeleton className='h-4' />
+                    <Skeleton className='h-4' />
+                    <Skeleton className='h-4' />
+                    <Skeleton className='h-4 w-24' />
+                    <Skeleton className='h-4 w-48' />
+                    <Skeleton className='h-4' />
+                    <Skeleton className='h-4' />
                     <Skeleton className='h-4' />
                     <Skeleton className='h-4' />
                 </div>
