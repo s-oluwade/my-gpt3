@@ -175,7 +175,6 @@ export default function Home() {
                 </div>
                 <div className=''>
                     <div id='country' className='hidden flex-wrap items-center p-1 md:flex'>
-                        {/* <span className='text-xs text-secondary-foreground'>COUNTRY: &nbsp;</span> */}
                         <div id='country-options'>
                             <Button
                                 className='h-6 text-xs'
