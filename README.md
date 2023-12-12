@@ -2,7 +2,7 @@
 
 [mynewsai.vercel.app](https://mynewsai.vercel.app/)
 
-- Serves news articles from the api and allows users to filter by category or country.
+- Serves news articles from API and allows users to filter by country and category.
 - Uses ChatGPT to summarize news articles.
-- It is currently hosted on vercel (link above).
-- It was developed using Nextjs, Shadcn UI, and TypeScript.
+- Currently hosted on vercel (link above).
+- Developed using Nextjs, Shadcn UI, and TypeScript.
